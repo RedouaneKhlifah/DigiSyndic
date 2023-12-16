@@ -1,12 +1,12 @@
 import axios from "axios";
 import { setAccessToken } from "./accessToken";
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useDispatch } from "react-redux";
 
 function RefreshToken() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     async function refreshTokenReq() {
       try {
         const response = await axios.post(

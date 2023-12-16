@@ -1,4 +1,9 @@
+import { useAppSelector } from "../../hooks/ReduxHooks";
+
 function Navbar() {
+  const user = useAppSelector((state) => state.user);
+  console.log(user);
+
   return (
     <div className="w-11/12 mt-4">
       <div className="flex justify-end">
@@ -29,7 +34,7 @@ function Navbar() {
         </div>
         <div className="profile">
           <div className=" bg-DarkBlue w-8 h-8 rounded-full flex justify-center items-center text-white text-xs ">
-            T
+            {user?.fullName && user.fullName[0].toUpperCase()}
           </div>
         </div>
       </div>

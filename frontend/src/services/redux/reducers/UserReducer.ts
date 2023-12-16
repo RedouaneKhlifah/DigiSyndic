@@ -1,11 +1,17 @@
 export interface State {
-  user: userData | null;
+  id: string | null;
+  fullName: string | null;
+  role: string | null;
 }
 
 type ActionType<T extends string, P> = {
   type: T;
   payload: P;
 };
+
+type actionsType =
+  | ActionType<"LOGIN", userData>
+  | ActionType<"lOGOUT", userData>;
 
 interface userData {
   id: string;
@@ -14,29 +20,29 @@ interface userData {
 }
 
 const initialState: State = {
-  user: null,
+  id: null,
+  fullName: null,
+  role: null,
 };
 
-const UserReducer = (
-  state: State = initialState,
-  action: ActionType<"LOGIN", userData> | ActionType<"lOGOUT", userData>
-) => {
+const UserReducer = (state: State = initialState, action: actionsType) => {
   switch (action.type) {
     case "LOGIN":
-      console.log("action.payload");
-      console.log(action.payload);
-
       return {
         ...state,
         user: action.payload,
+        id: action.payload.id,
+        fullName: action.payload.fullName,
+        role: action.payload.role.toLowerCase(),
       };
     case "lOGOUT":
       return {
         ...state,
-        user: null,
+        id: null,
+        fullName: null,
+        role: null,
       };
     default:
-      console.log("test");
       return state;
   }
 };

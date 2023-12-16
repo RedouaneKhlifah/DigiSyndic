@@ -32,6 +32,11 @@ export default function Modal({ open, setOpen }: ModalProps) {
     }));
   }
 
+  function handleSubmit(e: React.FormEvent<SubmitEvent>) {
+    e.preventDefault();
+    
+  }
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog
