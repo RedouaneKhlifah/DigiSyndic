@@ -1,10 +1,14 @@
 import {
+    GraphQLID,
     GraphQLInputObjectType,
     GraphQLInt,
     GraphQLNonNull,
     GraphQLString
 } from "graphql/type";
-import { createAppartmentResolver } from "../resolvers/AppartmentResolver";
+import {
+    createAppartmentResolver,
+    updateAppartmentResolver
+} from "../resolvers/AppartmentResolver";
 import AppartmentType from "../types/AppartmentType";
 
 const Client = new GraphQLInputObjectType({
@@ -27,6 +31,11 @@ const AppartmentMutations = {
         type: AppartmentType,
         args: Appartment_args,
         resolve: createAppartmentResolver
+    },
+    updateAppartment: {
+        type: AppartmentType,
+        args: { id: { type: GraphQLNonNull(GraphQLID) }, ...Appartment_args },
+        resolve: updateAppartmentResolver
     }
 };
 
