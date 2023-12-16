@@ -1,0 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Lalezar&family=Roboto:wght@500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  background-color: #f8f9fa;
+  font-family: "Roboto";
+}

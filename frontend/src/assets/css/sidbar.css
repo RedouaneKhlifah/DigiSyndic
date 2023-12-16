@@ -1,0 +1,4 @@
+.options .selected {
+  background-color: white;
+  transition: background-color 2s ease; /* Add a transition for background color */
+}
