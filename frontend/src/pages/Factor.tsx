@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
-import { useEffect } from "react";
-import { getAccessToken } from "../accessToken";
+// import { useEffect } from "react";
+// import { getAccessToken } from "../accessToken";
 
 const SYNDICS_QUERY = gql`
   {
@@ -15,22 +15,6 @@ const SYNDICS_QUERY = gql`
 
 function Factor() {
   const { data, loading, error } = useQuery(SYNDICS_QUERY);
-  console.log(getAccessToken());
-
-  function getSyndics() {
-    // No need to call SyndicQuery as a function
-    if (loading) {
-      return <div>loading</div>;
-    }
-    if (error) {
-      return <div>{JSON.stringify(error)}</div>;
-    }
-    return <div>{JSON.stringify(data)}</div>;
-  }
-
-  useEffect(() => {
-    getSyndics();
-  }, []);
 
   return (
     <>

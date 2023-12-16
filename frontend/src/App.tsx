@@ -2,7 +2,7 @@ import { RouterProvider } from "react-router-dom";
 import router from "./routes";
 import { Provider } from "react-redux";
 import store from "./services/redux/store";
-import RefreshToken from "./refreshToken";
+import RefreshToken from "./RefreshToken";
 
 function App() {
   // const dispatch = useDispatch();

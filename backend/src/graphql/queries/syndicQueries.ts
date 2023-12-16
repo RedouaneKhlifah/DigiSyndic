@@ -13,6 +13,7 @@ const syndicQueries = {
     },
     syndics: {
         type: new GraphQLList(UserType),
+        args: { id: { type: GraphQLID } },
         resolve: getSyndicsResolver
     }
 };

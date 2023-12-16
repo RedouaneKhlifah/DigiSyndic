@@ -65,7 +65,8 @@ export const refreshTokenController = asynchandler(async (req, res) => {
             accessToken: accessTokenGenerator(foundUser.id),
             user: {
                 id: foundUser.id,
-                fullName: foundUser.fullName
+                fullName: foundUser.fullName,
+                role: foundUser.role
             }
         });
     } catch (err) {

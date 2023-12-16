@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const ClientSchema = new mongoose.Schema({
-    fullName: {
-        type: Number,
+    full_name: {
+        type: String,
         required: [true, "Please fill the fullName"]
     },
-    PhoneNumber: {
+    phone_number: {
         type: String,
         ref: "User",
         required: [true, "Please provide a PhoneNumber"]
@@ -16,6 +16,10 @@ const AppartmentSchema = new mongoose.Schema({
     number: {
         type: Number,
         required: [true, "Please fill the number"]
+    },
+    floor: {
+        type: Number,
+        required: [true, "Please fill the floor"]
     },
     client: {
         type: ClientSchema,
