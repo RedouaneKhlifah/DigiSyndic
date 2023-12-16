@@ -8,3 +8,8 @@ export async function findByEmail({ email }: userT) {
     }
     return foundUser;
 }
+
+export async function findUserById(id: string) {
+    const foundUser = await User.findById(id);
+    return foundUser;
+}
