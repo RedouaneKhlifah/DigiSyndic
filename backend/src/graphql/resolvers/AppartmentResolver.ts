@@ -1,3 +1,4 @@
+import { sanitizer } from "../../utils/sanitizer";
 import {
     createAppartment,
     getAllSyndicAppartments,
@@ -6,16 +7,20 @@ import {
 import CustomError from "../Error/errorHandler";
 import { AppartmentT } from "../interfaces/appartment";
 import mongoose from "mongoose";
+import { AppartmentSchema, validator } from "../../validator/JoiSchemas";
 
 export async function createAppartmentResolver(
     _parent: any,
     args: AppartmentT
 ) {
     try {
-        const appartment = await createAppartment(args);
+        const sanitizedArgs = sanitizer(args);
+        validator(AppartmentSchema, sanitizedArgs);
+        const appartment = await createAppartment(sanitizedArgs);
+
         return appartment;
     } catch (error) {
-        throw new Error(error);
+        throw error;
     }
 }
 
@@ -40,7 +45,10 @@ export async function updateAppartmentResolver(
     args: AppartmentT
 ) {
     try {
-        const appartment = await getSyndicAppartmentId(args);
+        const sanitizedArgs = sanitizer(args);
+        validator(AppartmentSchema, sanitizedArgs);
+
+        const appartment = await getSyndicAppartmentId(sanitizedArgs);
         if (!appartment) {
             throw new Error("Appartement not exist");
         }
@@ -52,6 +60,6 @@ export async function updateAppartmentResolver(
         await appartment.save();
         return appartment;
     } catch (error) {
-        throw new CustomError(error);
+        throw error;
     }
 }

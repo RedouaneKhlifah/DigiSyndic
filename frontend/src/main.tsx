@@ -18,9 +18,6 @@ const httpLink = createHttpLink({
 
 const authLink = new ApolloLink((operation, forward) => {
   const accessToken = getAccessToken();
-
-  console.log("accessToken");
-  console.log(accessToken);
   if (accessToken) {
     operation.setContext({
       headers: {
@@ -31,6 +28,7 @@ const authLink = new ApolloLink((operation, forward) => {
 
   return forward(operation);
 });
+
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: ApolloLink.from([authLink, httpLink]),

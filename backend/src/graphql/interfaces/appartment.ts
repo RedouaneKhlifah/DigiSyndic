@@ -1,7 +1,7 @@
 export interface AppartmentT {
     id: string;
-    number: number;
-    floor: number;
+    number: string;
+    floor: string;
     client: ClientT;
     syndic_id: string;
 }

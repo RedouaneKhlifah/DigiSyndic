@@ -1,6 +1,10 @@
 import React, { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import InputDf from "../ui/inputs/InputDf";
+import { ApolloError, useMutation } from "@apollo/client";
+import { ADD_APPARTEMENT } from "../../graphql/appartement";
+import { useAppSelector } from "../../hooks/ReduxHooks";
+import { errorTypes } from "../../../../constant/Errors";
 
 interface ModalProps {
   open: boolean;
@@ -8,13 +12,14 @@ interface ModalProps {
 }
 
 export default function Modal({ open, setOpen }: ModalProps) {
+  const user = useAppSelector((state) => state.user);
+
   const cancelButtonRef = useRef(null);
   const [form, setForm] = useState({
-    userName: "",
-    phoneNumber: "",
+    full_name: "",
+    phone_number: "",
     number: "",
     floor: "",
-    status: "",
   });
 
   function handleChange(
@@ -26,15 +31,57 @@ export default function Modal({ open, setOpen }: ModalProps) {
       value: string;
       files?: FileList;
     };
+
+    console.log(form);
     setForm((prev) => ({
       ...prev,
       [name]: value,
     }));
   }
 
-  function handleSubmit(e: React.FormEvent<SubmitEvent>) {
+  const [addAppartementMutation] = useMutation(ADD_APPARTEMENT);
+
+  // const [error, setError] = useState({
+  //   field: "",
+  //   message: "",
+  // });
+
+  const [validationErrors, setValidationErrors] = useState([]);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    
+    console.log("goof");
+
+    try {
+      const {} = await addAppartementMutation({
+        variables: {
+          number: form.number,
+          floor: form.floor,
+          client: {
+            full_name: form.full_name,
+            phone_number: form.phone_number,
+          },
+          syndic_id: user.id,
+        },
+      });
+      setValidationErrors([]);
+    } catch (error) {
+      if (
+        error instanceof ApolloError &&
+        error.graphQLErrors &&
+        error.graphQLErrors.length > 0
+      ) {
+        // Access the validationErrors from the first GraphQL error
+        const firstGraphQLError = error.graphQLErrors[0];
+
+        if (
+          firstGraphQLError?.extensions?.kind === errorTypes.FORM_VALIDATION
+        ) {
+          // Update the state with validationErrors
+          setValidationErrors(firstGraphQLError.extensions.validationErrors);
+        }
+      }
+    }
   }
 
   return (
@@ -72,32 +119,36 @@ export default function Modal({ open, setOpen }: ModalProps) {
                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
-                      <form className="">
+                      <form onSubmit={handleSubmit} className="">
                         <h1 className="text-center text-DarkBlue mb-10 font-bold">
                           ADD APPARTEMENT
                         </h1>
                         <div className="flex gap-4">
                           <InputDf
+                            validationErrors={validationErrors}
                             label="Client Name"
-                            name="userName"
+                            name="full_name"
                             onChange={handleChange}
-                            value={form.userName}
+                            value={form.full_name}
                           />
                           <InputDf
+                            validationErrors={validationErrors}
                             label="client phoneNumber"
-                            name="phoneNumber"
+                            name="phone_number"
                             onChange={handleChange}
-                            value={form.phoneNumber}
+                            value={form.phone_number}
                           />
                         </div>
                         <div className="flex gap-4 pt-10">
                           <InputDf
+                            validationErrors={validationErrors}
                             label="Appartement number"
                             name="number"
                             onChange={handleChange}
                             value={form.number}
                           />
                           <InputDf
+                            validationErrors={validationErrors}
                             label="Appartement floor"
                             name="floor"
                             onChange={handleChange}
@@ -114,9 +165,8 @@ export default function Modal({ open, setOpen }: ModalProps) {
                             Cancel
                           </button>
                           <button
-                            type="button"
+                            type="submit"
                             className="inline-flex w-full justify-center rounded-md bg-DarkBlue px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-DarkerBlue hover:shadow-md sm:ml-3 sm:w-auto"
-                            // onClick={handleSubmit}
                           >
                             Submit
                           </button>

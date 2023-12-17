@@ -1,9 +1,4 @@
-import {
-    GraphQLObjectType,
-    GraphQLID,
-    GraphQLString,
-    GraphQLInt
-} from "graphql";
+import { GraphQLObjectType, GraphQLID, GraphQLString } from "graphql";
 
 export const ClientType = new GraphQLObjectType({
     name: "client",
@@ -18,10 +13,10 @@ export const AppartmentType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         number: {
-            type: GraphQLInt
+            type: GraphQLString
         },
         floor: {
-            type: GraphQLInt
+            type: GraphQLString
         },
         client: { type: ClientType },
         syndic_id: { type: GraphQLString }

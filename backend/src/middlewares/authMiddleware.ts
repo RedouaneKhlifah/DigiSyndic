@@ -9,8 +9,6 @@ async function isAuthenticated(
 ) {
     try {
         const authHeader: string = context?.headers?.authorization;
-        console.log(context?.headers);
-        console.log(authHeader);
 
         if (!authHeader) {
             throw new Error("Not authorized - no token");
