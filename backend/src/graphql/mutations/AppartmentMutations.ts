@@ -1,7 +1,6 @@
 import {
     GraphQLID,
     GraphQLInputObjectType,
-    GraphQLInt,
     GraphQLNonNull,
     GraphQLString
 } from "graphql/type";
@@ -20,8 +19,8 @@ const Client = new GraphQLInputObjectType({
 });
 
 const Appartment_args = {
-    number: { type: GraphQLNonNull(GraphQLInt) },
-    floor: { type: GraphQLNonNull(GraphQLInt) },
+    number: { type: GraphQLNonNull(GraphQLString) },
+    floor: { type: GraphQLNonNull(GraphQLString) },
     client: { type: Client },
     syndic_id: { type: GraphQLNonNull(GraphQLString) }
 };

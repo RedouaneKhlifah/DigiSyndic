@@ -26,7 +26,7 @@ function LoginForm() {
   const user = useAppSelector((state) => state.user);
   useLayoutEffect(() => {
     if (user) {
-      navigate("/factor");
+      navigate("/Factor");
     }
   }, [navigate, user]);
 

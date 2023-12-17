@@ -1,8 +1,0 @@
-{
-  syndics {
-    id
-    fullName
-    email
-    role
-  }
-}

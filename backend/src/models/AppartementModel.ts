@@ -14,11 +14,11 @@ const ClientSchema = new mongoose.Schema({
 
 const AppartmentSchema = new mongoose.Schema({
     number: {
-        type: Number,
+        type: String,
         required: [true, "Please fill the number"]
     },
     floor: {
-        type: Number,
+        type: String,
         required: [true, "Please fill the floor"]
     },
     client: {
