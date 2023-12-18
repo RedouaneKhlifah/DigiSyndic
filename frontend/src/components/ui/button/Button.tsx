@@ -1,7 +1,8 @@
-import React from "react";
-import { Props } from "../../interfaces/Button";
-
-function Button({ text, styling }: Props) {
+interface buttonProps {
+  text: string;
+  styling: string;
+}
+function Button({ text, styling }: buttonProps) {
   return (
     <>
       <button className={`${styling} drop-shadow-inset-black-sm`}>

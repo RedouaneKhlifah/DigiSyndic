@@ -1,13 +1,13 @@
 import { AppartmentT } from "../graphql/interfaces/appartment";
 import Appartment from "../models/AppartementModel";
 
-export async function getAllSyndicAppartments({ syndic_id }: AppartmentT) {
+export async function getAllAppartments({ syndic_id }: AppartmentT) {
     return await Appartment.find({ syndic_id });
 }
 
-export async function getSyndicAppartmentId({ id, syndic_id }: AppartmentT) {
-    const syndic = await Appartment.findOne({ _id: id, syndic_id });
-    return syndic;
+export async function getAppartmentById({ id, syndic_id }: AppartmentT) {
+    const appartment = await Appartment.findOne({ _id: id, syndic_id });
+    return appartment;
 }
 
 export async function createAppartment({
@@ -25,5 +25,16 @@ export async function createAppartment({
         },
         syndic_id
     });
+    return appartment;
+}
+
+export async function deleteAppartementById({ id, syndic_id }: AppartmentT) {
+    const appartment = await Appartment.findOneAndDelete(
+        {
+            _id: id,
+            syndic_id
+        },
+        { new: true }
+    );
     return appartment;
 }

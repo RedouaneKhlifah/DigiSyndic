@@ -2,25 +2,22 @@ import React, { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import InputDf from "../ui/inputs/InputDf";
 import { ApolloError, useMutation } from "@apollo/client";
-import { ADD_APPARTEMENT } from "../../graphql/appartement";
+import { ADD_APPARTEMENT, UPDATE_APPARTEMENT } from "../../graphql/appartement";
 import { useAppSelector } from "../../hooks/ReduxHooks";
 import { errorTypes } from "../../../../constant/Errors";
+import { ModalProps } from "../../interface/form";
 
-interface ModalProps {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export default function Modal({ open, setOpen }: ModalProps) {
+export default function Modal({
+  open,
+  setOpen,
+  form,
+  setForm,
+  selectedId,
+  setSelectedId,
+}: ModalProps) {
   const user = useAppSelector((state) => state.user);
 
   const cancelButtonRef = useRef(null);
-  const [form, setForm] = useState({
-    full_name: "",
-    phone_number: "",
-    number: "",
-    floor: "",
-  });
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -40,30 +37,59 @@ export default function Modal({ open, setOpen }: ModalProps) {
   }
 
   const [addAppartementMutation] = useMutation(ADD_APPARTEMENT);
+  const [updateAppartementMutation] = useMutation(UPDATE_APPARTEMENT);
 
-  // const [error, setError] = useState({
-  //   field: "",
-  //   message: "",
-  // });
+  async function addAppartement() {
+    const {} = await addAppartementMutation({
+      variables: {
+        number: form.number,
+        floor: form.floor,
+        client: {
+          full_name: form.full_name,
+          phone_number: form.phone_number,
+        },
+        syndic_id: user.id,
+      },
+    });
+  }
+
+  async function UpdateaddAppartement() {
+    const {} = await updateAppartementMutation({
+      variables: {
+        id: selectedId,
+        number: form.number,
+        floor: form.floor,
+        client: {
+          full_name: form.full_name,
+          phone_number: form.phone_number,
+        },
+        syndic_id: user.id,
+      },
+    });
+  }
+
+  console.log(selectedId);
 
   const [validationErrors, setValidationErrors] = useState([]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("goof");
 
     try {
-      const {} = await addAppartementMutation({
-        variables: {
-          number: form.number,
-          floor: form.floor,
-          client: {
-            full_name: form.full_name,
-            phone_number: form.phone_number,
-          },
-          syndic_id: user.id,
-        },
-      });
+      if (!selectedId) {
+        await addAppartement();
+      } else {
+        await UpdateaddAppartement();
+      }
+      setOpen(false);
+      setForm((prv) => ({
+        ...prv,
+        full_name: "",
+        phone_number: "",
+        number: "",
+        floor: "",
+      }));
+      setSelectedId(null);
       setValidationErrors([]);
     } catch (error) {
       if (
