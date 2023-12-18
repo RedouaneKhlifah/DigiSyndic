@@ -38,6 +38,7 @@ const ClientSchema = Joi.object({
 }).messages(customErrorMessages);
 
 export const AppartmentSchema = Joi.object({
+    id: Joi.string(),
     number: Joi.string().required(),
     floor: Joi.string().required(),
     client: ClientSchema.required(),

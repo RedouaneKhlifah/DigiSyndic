@@ -41,3 +41,4 @@ export async function getSyndicsResolver(_parent: any, _args: any) {
         throw new CustomError(error);
     }
 }
+

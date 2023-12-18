@@ -6,6 +6,7 @@ import {
 } from "graphql/type";
 import {
     createAppartmentResolver,
+    deleteAppartmentResolver,
     updateAppartmentResolver
 } from "../resolvers/AppartmentResolver";
 import AppartmentType from "../types/AppartmentType";
@@ -35,6 +36,16 @@ const AppartmentMutations = {
         type: AppartmentType,
         args: { id: { type: GraphQLNonNull(GraphQLID) }, ...Appartment_args },
         resolve: updateAppartmentResolver
+    },
+    deleteAppartement: {
+        type: AppartmentType,
+        args: {
+            id: {
+                type: GraphQLNonNull(GraphQLID)
+            },
+            syndic_id: { type: GraphQLNonNull(GraphQLString) }
+        },
+        resolve: deleteAppartmentResolver
     }
 };
 

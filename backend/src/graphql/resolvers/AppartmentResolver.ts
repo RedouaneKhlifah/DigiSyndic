@@ -1,8 +1,9 @@
 import { sanitizer } from "../../utils/sanitizer";
 import {
     createAppartment,
-    getAllSyndicAppartments,
-    getSyndicAppartmentId
+    getAllAppartments,
+    deleteAppartementById,
+    getAppartmentById
 } from "../../services/AppartmentServices";
 import CustomError from "../Error/errorHandler";
 import { AppartmentT } from "../interfaces/appartment";
@@ -26,7 +27,7 @@ export async function createAppartmentResolver(
 
 export async function getAppartmentsResolver(_parent: any, args: AppartmentT) {
     try {
-        return await getAllSyndicAppartments(args);
+        return await getAllAppartments(args);
     } catch (error) {
         throw new CustomError(error);
     }
@@ -34,7 +35,7 @@ export async function getAppartmentsResolver(_parent: any, args: AppartmentT) {
 
 export async function getAppartmentResolver(_parent: any, args: AppartmentT) {
     try {
-        return await getSyndicAppartmentId(args);
+        return await getAppartmentById(args);
     } catch (error) {
         throw new CustomError(error);
     }
@@ -48,7 +49,7 @@ export async function updateAppartmentResolver(
         const sanitizedArgs = sanitizer(args);
         validator(AppartmentSchema, sanitizedArgs);
 
-        const appartment = await getSyndicAppartmentId(sanitizedArgs);
+        const appartment = await getAppartmentById(sanitizedArgs);
         if (!appartment) {
             throw new Error("Appartement not exist");
         }
@@ -61,5 +62,21 @@ export async function updateAppartmentResolver(
         return appartment;
     } catch (error) {
         throw error;
+    }
+}
+
+export async function deleteAppartmentResolver(
+    _parent: any,
+    args: AppartmentT
+) {
+    try {
+        const foundAppartement = await getAppartmentById(args);
+        if (!foundAppartement) {
+            throw new Error("appartement not found");
+        }
+        const deletedAppartement = await deleteAppartementById(args);
+        return deletedAppartement;
+    } catch (error) {
+        throw new Error(error);
     }
 }

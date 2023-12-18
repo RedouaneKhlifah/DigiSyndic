@@ -1,27 +1,69 @@
 import { FaRegTrashAlt } from "react-icons/fa";
-import ButtonIcon from "../ui/button/ModalBtn";
+import { appartementT, tableProps } from "../../interface/form";
+import { useMutation } from "@apollo/client";
+import { DELETE_APPARTEMENT } from "../../graphql/appartement";
+import { useAppSelector } from "../../hooks/ReduxHooks";
 
 const people = [
   {
-    name: "Redouane khlifah",
-    phoneNumbr: "063423247",
+    id: "65800f0da3f97e79bfeb174b",
+    full_name: "Redouane khlifah",
+    phone_number: "063423247",
     number: "2",
-    Floor: "1",
+    floor: "1",
     status: true,
     role: "Member",
   },
   {
-    name: "saad nojila",
-    phoneNumbr: "063423247",
+    id: "65800f0da3f97e79bfeb174b",
+    full_name: "saad nojila",
+    phone_number: "063423247",
     number: "2",
-    Floor: "1",
+    floor: "1",
     status: false,
     role: "Member",
   },
   // More people...
 ];
 
-function Table() {
+function Table({ setForm, setSelectedId, setOpen }: tableProps) {
+  const user = useAppSelector((state) => state.user);
+
+  function handleUpdate({
+    id,
+    full_name,
+    phone_number,
+    number,
+    floor,
+  }: appartementT) {
+    setForm((prev) => ({
+      ...prev,
+      full_name,
+      phone_number,
+      number,
+      floor,
+    }));
+    setOpen(true);
+    setSelectedId(id);
+  }
+
+  const [DeleteAppartementMutation] = useMutation(DELETE_APPARTEMENT);
+
+  async function deleteAppartment(id: string) {
+    try {
+      const { data } = await DeleteAppartementMutation({
+        variables: {
+          id: id,
+          syndic_id: user.id,
+        },
+      });
+
+      console.log("Deleted Appartment:", data); // Log the deleted apartment data
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <>
       <div className="mt-8 flex flex-col w-[95%]">
@@ -68,9 +110,11 @@ function Table() {
                         <div className="flex items-center gap-4  ">
                           <div className=" bg-DarkBlue rounded-lg w-7 h-7 "></div>
                           <div className="flex flex-col w-0 ">
-                            <span className="text-xs block">{person.name}</span>
+                            <span className="text-xs block">
+                              {person.full_name}
+                            </span>
                             <span className="text-xs font-thin text-gray-500 block ">
-                              {person.phoneNumbr}
+                              {person.phone_number}
                             </span>
                           </div>
                         </div>
@@ -79,7 +123,7 @@ function Table() {
                         {person.number}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-xs text-gray-500">
-                        {person.Floor}
+                        {person.floor}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-xs text-gray-500 w-20 ">
                         <div
@@ -92,10 +136,18 @@ function Table() {
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-xs font-medium sm:pr-6 w-0  ">
                         <div className=" flex justify-center gap-8 w-min">
-                          <div className="text-indigo-600 hover:text-indigo-900 cursor-pointer pl-6">
+                          <div
+                            onClick={() => handleUpdate(person)}
+                            className="text-indigo-600 hover:text-indigo-900 cursor-pointer pl-6"
+                          >
                             Edit
                           </div>
-                          <div className=" hover:text-indigo-900 cursor-pointer">
+                          <div
+                            onClick={() => {
+                              deleteAppartment(person.id);
+                            }}
+                            className=" hover:text-indigo-900 cursor-pointer"
+                          >
                             <FaRegTrashAlt />
                           </div>
                         </div>

@@ -1,9 +1,7 @@
 import { GoPlus } from "react-icons/go";
-import Modal from "../../modals/Modal";
-import { useState } from "react";
+import { ModalButtonProps } from "../../../interface/form";
 
-function ModalBtn() {
-  const [open, setOpen] = useState<boolean>(false);
+function ModalBtn({ setOpen }: ModalButtonProps) {
   return (
     <div>
       <button
@@ -15,7 +13,6 @@ function ModalBtn() {
           <GoPlus />
         </div>
       </button>
-      <Modal open={open} setOpen={setOpen} />
     </div>
   );
 }

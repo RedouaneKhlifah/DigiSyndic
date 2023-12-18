@@ -5,7 +5,6 @@ import store from "./services/redux/store";
 import RefreshToken from "./RefreshToken";
 
 function App() {
-  // const dispatch = useDispatch();
   return (
     <>
       <Provider store={store}>
